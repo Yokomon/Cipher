@@ -27,21 +27,105 @@ const encrypt = {
   "x": "v",
   "y": "b",
   "z": "n",
-  " ": "#"
-};
-router.post("/", (req, res) => {
-  const {
-    tobeencoded
-  } = req.body;
+  " ": "#",
+  "0": ")",
+  "1": "(",
+  "2": "*",
+  "3": "&",
+  "4": "^",
+  "5": "%",
+  "6": "$",
+  "7": "#",
+  "8": "@",
+  "9": "!",
+}
+const cycle = {
+  "a": "p",
+  "b": "o",
+  "c": "i",
+  "d": "u",
+  "e": "y",
+  "f": "t",
+  "g": "r",
+  "h": "e",
+  "i": "w",
+  "j": "q",
+  "k": "l",
+  "l": "k",
+  "m": "j",
+  "n": "h",
+  "o": "g",
+  "p": "f",
+  "q": "d",
+  "r": "s",
+  "s": "a",
+  "t": "m",
+  "u": "n",
+  "v": "b",
+  "w": "v",
+  "x": "c",
+  "y": "x",
+  "z": "z",
+  " ": "#",
+  "0": "+",
+  "1": "=",
+  "2": "-",
+  "3": "_",
+  "4": "]",
+  "5": "|",
+  "6": "[",
+  "7": "~",
+  "8": "`",
+  "9": "!",
+  "10": ">",
 
-  function encode(lowerCaseString) {
-    let encryptedString = "";
-    for (const char of lowerCaseString) {
-      encryptedString += encrypt[char];
+};
+// router.post("/", (req, res) => {
+//   const {
+//     tobeencoded
+//   } = req.body;
+
+//   function encode(lowerCaseString) {
+//     let encryptedString = "";
+//     for (const char of lowerCaseString) {
+//       encryptedString += encrypt[char];
+//     }
+//     res.render('render', {
+//       code: encryptedString
+//     })
+//   }
+//   encode(tobeencoded);
+// });
+
+router.post('/', (req, res) => {
+  const {
+    string
+  } = req.body;
+  let errors = [];
+  if (!string) {
+    errors.push({
+      message: 'Please, Enter Text to encrpty'
+    });
+    res.render('index', {
+      errors: errors[0].message
+    })
+
+  } else {
+    const lowerCaseString = string.toLowerCase();
+
+    function encode(lowerCaseString) {
+      let encryptedString = '';
+      for (const char of lowerCaseString) {
+        encryptedString += encrypt[char];
+        encryptedString += cycle[char]
+      }
+      res.render('render', {
+        currentYear: new Date().getFullYear(),
+        code: encryptedString
+      });
     }
-    res.send(encryptedString)
+    encode(lowerCaseString);
   }
-  encode(tobeencoded);
 });
 
 module.exports = router;
